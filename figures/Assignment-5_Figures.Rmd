@@ -1,0 +1,50 @@
+---
+title: "Assignment 5 Figures"
+author: "Jezella Peraza"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+```
+
+### Read in the data
+
+```{r}
+data <- read.csv(here("data/siscowet.csv"))
+```
+
+### Exploratory figure
+
+```{r, echo=FALSE}
+ggplot(data, aes(x=len, color=sex)) +
+  geom_density()
+```
+
+### Expository figure
+
+```{r, echo=FALSE}
+data <- data %>%
+  na.omit()
+
+data$sex[data$sex == "M"] <- "Male"
+data$sex[data$sex == "F"] <- "Female"
+```
+
+
+```{r, echo=FALSE}
+density_len_plot <- ggplot(data, aes(x = len, fill = sex)) +
+  geom_histogram(aes(y=after_stat(density)), colour="black", fill="white", binwidth = 20) +
+  geom_density(alpha = 0.4) + 
+  facet_grid(sex ~ .) + 
+  ggtitle("Density and length plot of Siscowet Lake Trout in Lake Superior, Michigan") +
+  labs(y = "Density of Siscowet Lake Trout", x = "Length (mm) of Siscowet Lake Trout") +
+  theme(legend.position = "none") 
+
+density_len_plot + scale_fill_manual(values=c("#c994c7", "#7fcdbb"))
+```
+
